@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/little-octopus-dashboard/',
   plugins: [react(), tailwindcss()],
   resolve: {
     dedupe: ['react', 'react-dom'],
