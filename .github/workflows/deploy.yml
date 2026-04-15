@@ -3,6 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -19,15 +20,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
       - run: npm ci --legacy-peer-deps
-      - run: npm run build
+      - run: node scripts/build-archive.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./dist-archive
 
   deploy:
     needs: build

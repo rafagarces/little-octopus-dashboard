@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard — Design Versions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./gallery.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <div>
+            <div class="brand-title">Acme Dashboard</div>
+            <div class="brand-sub">Design versions &amp; changelog</div>
+          </div>
+        </div>
+        <a class="repo-link" href="https://github.com/rafagarces/little-octopus-dashboard" target="_blank" rel="noopener">github.com/rafagarces/little-octopus-dashboard ↗</a>
+      </header>
+
+      <section class="intro">
+        Every numbered release of the dashboard lives here permanently. Open any
+        version to see it exactly as it was on its release date, or
+        <strong>compare two versions side-by-side</strong> to see what changed.
+        New releases appear at the top.
+      </section>
+
+      <section class="versions" id="versions">
+        <!-- rendered by script below -->
+      </section>
+    </main>
+
+    <script>
+      (async () => {
+        const container = document.getElementById('versions');
+        let data;
+        try {
+          const res = await fetch('./versions.json', { cache: 'no-store' });
+          data = await res.json();
+        } catch (e) {
+          container.innerHTML = '<div class="card"><div class="unavailable">versions.json not found — run the archive build first.</div></div>';
+          return;
+        }
+
+        const { latest, versions } = data;
+        const cards = [];
+
+        if (latest && latest.available) {
+          cards.push(`
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <span class="pill latest">Latest · unreleased</span>
+                  <div class="version-tag" style="margin-top:6px">main</div>
+                </div>
+                <div class="version-date">${escape(latest.date || '')}</div>
+              </div>
+              <p class="changelog" style="list-style:none;padding-left:0;margin-top:4px">
+                Tip of the <code>main</code> branch — may include unreleased changes.
+              </p>
+              <div class="actions">
+                <a class="btn btn-primary" href="./latest/" target="_blank" rel="noopener">Open latest ↗</a>
+              </div>
+            </article>
+          `);
+        }
+
+        for (const v of versions) {
+          const changeItems = v.changes.map((c) => `<li>${escape(c)}</li>`).join('');
+          const openBtn = v.available
+            ? `<a class="btn btn-primary" href="./versions/${encodeURIComponent(v.tag)}/" target="_blank" rel="noopener">Open ${escape(v.tag)} ↗</a>`
+            : `<span class="unavailable">Build unavailable — source at tag ${escape(v.tag)}</span>`;
+          const compareBtn = v.available
+            ? `<a class="btn" href="./compare/?a=${encodeURIComponent(v.tag)}">Compare with…</a>`
+            : '';
+          cards.push(`
+            <article class="card">
+              <div class="card-head">
+                <div>
+                  <span class="pill">Release</span>
+                  <div class="version-tag" style="margin-top:6px">${escape(v.tag)}</div>
+                </div>
+                <div class="version-date">${escape(v.date)}</div>
+              </div>
+              <ul class="changelog">${changeItems}</ul>
+              <div class="actions">
+                ${openBtn}
+                ${compareBtn}
+              </div>
+            </article>
+          `);
+        }
+
+        container.innerHTML = cards.join('');
+
+        function escape(s) {
+          return String(s).replace(/[&<>"']/g, (c) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+          }[c]));
+        }
+      })();
+    </script>
+  </body>
+</html>
