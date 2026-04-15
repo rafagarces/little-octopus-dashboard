@@ -2,6 +2,25 @@
 @source "../node_modules/@payfit/unity-components/dist";
 @source "./";
 
+/* Theme override: remap the Unity blue primitive palette to green.
+   Every semantic token that resolves through --uy-color-blue-lN
+   (surface-primary, content-primary, border-primary, form-active, etc.)
+   now renders green without touching any component. */
+:root {
+  --uy-color-blue-l1: var(--uy-color-green-l1);
+  --uy-color-blue-l2: var(--uy-color-green-l2);
+  --uy-color-blue-l3: var(--uy-color-green-l3);
+  --uy-color-blue-l4: var(--uy-color-green-l4);
+  --uy-color-blue-l5: var(--uy-color-green-l5);
+  --uy-color-blue-l6: var(--uy-color-green-l6);
+  --uy-color-blue-l7: var(--uy-color-green-l7);
+  --uy-color-blue-l8: var(--uy-color-green-l8);
+  --uy-color-blue-l9: var(--uy-color-green-l9);
+  --uy-color-blue-l10: var(--uy-color-green-l10);
+  --uy-color-blue-l11: var(--uy-color-green-l11);
+  --uy-color-blue-l12: var(--uy-color-green-l12);
+}
+
 html,
 body,
 #root {

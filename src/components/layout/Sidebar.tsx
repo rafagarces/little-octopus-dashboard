@@ -31,7 +31,7 @@ export function Sidebar({ activeId, onSelect, searchValue, onSearchChange }: Pro
             aria-hidden
             className="uy:inline-flex uy:size-400 uy:items-center uy:justify-center uy:rounded-full uy:bg-surface-primary uy:text-content-primary-inverse uy:typography-body-strong"
             style={{
-              background: 'var(--color-surface-primary, #0a73eb)',
+              background: 'var(--color-surface-primary, #10bc4c)',
               color: '#fff',
             }}
           >
